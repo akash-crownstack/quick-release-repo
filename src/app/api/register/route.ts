@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import { db } from "@/lib/db";
 import { NextApiResponse } from "next";
+
 export async function POST(request: Request, res: NextApiResponse) {
   try {
     const body = await request.json();
@@ -19,13 +20,10 @@ export async function POST(request: Request, res: NextApiResponse) {
       });
     }
     if (existingOrgName) {
-      return NextResponse.json(
-        {
-          status: 400,
-          message: "Organisation already exists",
-        },
-        { status: 400 }
-      );
+      return NextResponse.json({
+        message: "Organisation already exists",
+        status: 400,
+      });
     }
     const register = await db.user.create({
       data: {
