@@ -8,6 +8,8 @@ export default async function Home() {
         title="Login to your account"
         description="Enter your email to login to quick release"
         isLoginForm={true}
+        containerHeight="100%"
+        height="100vh"
       >
         <LoginForm />
       </AuthForm>
