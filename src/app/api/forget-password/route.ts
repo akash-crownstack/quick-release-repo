@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
-  sgMail
+  await sgMail
     .send(msg)
     .then(() => {
       return new NextResponse("Reset Password email is sent", { status: 200 });
