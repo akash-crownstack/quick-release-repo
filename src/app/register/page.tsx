@@ -7,7 +7,6 @@ const Register = () => {
   return (
     <>
       <AuthForm
-        height="800vh"
         title="Create an account"
         description="Enter your details below to create your account"
       >

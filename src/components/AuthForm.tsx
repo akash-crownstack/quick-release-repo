@@ -7,7 +7,6 @@ interface AuthFormProps {
   title?: string;
   description?: string;
   isLoginForm?: boolean;
-  height?: string;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
@@ -15,16 +14,13 @@ const AuthForm: React.FC<AuthFormProps> = ({
   title,
   description,
   isLoginForm,
-  height,
 }) => {
   return (
     <>
       <div
         className={`${
-          isLoginForm
-            ? "h-[550px] mt-16 md:h-[100vh] overflow-hidden md:mt-[-10px]"
-            : `h-[${height}] mt-4 md:mt-0`
-        } border-2 border-slate-100 shadow-lg rounded-md container relative  flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0`}
+          isLoginForm ? "h-[550px] mt-16 md:mt-0" : "h-[800px] mt-4 md:mt-0"
+        } border-2 border-slate-100 shadow-lg rounded-md container relative md:h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0`}
       >
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
@@ -67,5 +63,4 @@ const AuthForm: React.FC<AuthFormProps> = ({
     </>
   );
 };
-
 export default AuthForm;

@@ -6,7 +6,6 @@ const ForgotPassword = () => {
     <AuthForm
       title="Reset Your Password"
       description="Enter email to recieve recovery link"
-      height="100vh"
     >
       <ForgotPasswordForm />
     </AuthForm>
