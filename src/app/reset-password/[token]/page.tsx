@@ -29,11 +29,7 @@ const ResetPassword = ({ params }: any) => {
   }, [params.token]);
 
   return (
-    <AuthForm
-      title="Enter Your New Password"
-      height="100vh"
-      containerHeight="100vh"
-    >
+    <AuthForm title="Enter Your New Password">
       <ResetPasswordForm user={user} />
     </AuthForm>
   );
