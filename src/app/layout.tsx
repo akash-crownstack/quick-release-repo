@@ -32,7 +32,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Provider>
-            <div className="h-full pt-1">{children}</div>
+            <div className="">{children}</div>
             <Toaster />
           </Provider>
         </ThemeProvider>

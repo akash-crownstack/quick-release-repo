@@ -158,10 +158,10 @@ const RegisterForm = () => {
           </Button>
         </form>
       </Form>
-      <div className="relative">
+      <div className="relative mt-2">
         <div className="relative flex justify-center text-md">
           <Link href="/">
-            <span className="bg-background px-2 text-muted-foreground">
+            <span className="bg-background text-muted-foreground ">
               Already have an account?
               <span className="font-bold text-black underline px-2">
                 Log In

@@ -7,7 +7,6 @@ export default async function Home() {
       <AuthForm
         title="Login to your account"
         description="Enter your email to login to quick release"
-        isLoginForm={true}
       >
         <LoginForm />
       </AuthForm>
