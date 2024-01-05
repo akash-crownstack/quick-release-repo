@@ -38,28 +38,10 @@ export async function POST(request: Request) {
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
-  await sgMail
-    .send(msg)
-    .then(() => {
-      return new NextResponse("Reset Password email is sent", { status: 200 });
-    })
-    .catch(async (error) => {
-      await db.user.update({
-        where: {
-          email: body.email,
-        },
-        data: {
-          resetToken: null,
-          resetTokenExpiry: null,
-        },
-      });
-
-      return new NextResponse("Failed sending email.Try again", {
-        status: 400,
-      });
-    });
-
   try {
+    const sent = await sgMail.send(msg);
+    console.log(sent, "sent");
+
     await db.user.update({
       where: {
         email: body.email,
@@ -69,10 +51,21 @@ export async function POST(request: Request) {
         resetTokenExpiry: passwordResetExpires,
       },
     });
-  } catch (error: any) {
-    return new Response(error, {
-      status: 500,
+
+    return new NextResponse("Reset Password email is sent", { status: 200 });
+  } catch (err) {
+    console.error(err);
+
+    await db.user.update({
+      where: {
+        email: body.email,
+      },
+      data: {
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
     });
+
+    return new NextResponse("Failed sending email. Try again", { status: 400 });
   }
-  return new NextResponse();
 }
