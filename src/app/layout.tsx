@@ -5,7 +5,6 @@ import Provider from "@/components/Provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
-import { CookiesProvider } from "next-client-cookies/server";
 import { getServerSession } from "next-auth/next";
 import AuthProvider from "./context/AuthProvider";
 
