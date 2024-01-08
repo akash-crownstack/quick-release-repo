@@ -15,9 +15,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "./ModeToggle";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
+import { useCookies } from "next-client-cookies";
+import { cookies } from "next/headers";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -31,6 +33,7 @@ const components: { title: string; href: string; description: string }[] = [
 export function Navbar() {
   const router = useRouter();
   const [loader, setLoader] = React.useState(false);
+  const { data: session } = useSession();
   const handleLogout = async () => {
     setLoader(true);
     try {
@@ -56,7 +59,7 @@ export function Navbar() {
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[250px] ">
                   {components.map((component) => (
-                    <div className="flex items-center">
+                    <div className="flex items-center" key={component.title}>
                       <ListItem
                         onClick={handleLogout}
                         key={component.title}
