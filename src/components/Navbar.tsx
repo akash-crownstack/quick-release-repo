@@ -14,12 +14,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "./ModeToggle";
-import MaxWidthWrapper from "./MaxWidthWrapper";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
-import { useCookies } from "next-client-cookies";
-import { cookies } from "next/headers";
 
 const components: { title: string; href: string; description: string }[] = [
   {
