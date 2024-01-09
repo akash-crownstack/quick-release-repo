@@ -4,8 +4,10 @@ import { Navbar } from "@/components/Navbar";
 import { TypographyH3, TypographyP } from "@/components/Typography";
 import { db } from "@/lib/db";
 import dayjs from "dayjs";
+import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
+import { redirect, useRouter } from "next/navigation";
 
 const getPosts = async () => {
   const response = await db.logs.findMany({
@@ -24,8 +26,9 @@ const getPosts = async () => {
   return response;
 };
 
-export default async function AllLogs() {
+export default async function AllLogs({ req }: any) {
   const changeLogs = await getPosts();
+
   return (
     <>
       <Navbar />
