@@ -38,14 +38,19 @@ const BlogDetail: FC<BlogDetailProp> = async ({ params }) => {
     <div>
       <Navbar />
       <MaxWidthWrapper>
-        <TypographyH1 children={`${changelog?.title}`} />
-        <TypographyP
-          children={`Published on ${dayjs(changelog?.createdAt).format(
-            DateFormat.LONG
-          )} as Version ${changelog?.releaseVersion}`}
-        />
-        <div className="py-12">{parse(changelog?.description as any)}</div>
-        <h1>{changelog?.releaseCategory}</h1>
+        <div className="flex flex-col items-center justify-center py-4">
+          <TypographyH1
+            children={`${changelog?.title}`}
+            className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight"
+          />
+          <TypographyP
+            children={`Published on ${dayjs(changelog?.createdAt).format(
+              DateFormat.LONG
+            )} as Version ${changelog?.releaseVersion}`}
+          />
+          <p className="py-12">{parse(changelog?.description as any)}</p>
+          <h1>{changelog?.releaseCategory}</h1>
+        </div>
       </MaxWidthWrapper>
     </div>
   );
