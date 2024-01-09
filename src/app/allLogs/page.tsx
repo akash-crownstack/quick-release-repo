@@ -30,7 +30,6 @@ export default async function AllLogs({ req }: any) {
 
   return (
     <>
-      <Navbar />
       <MaxWidthWrapper>
         <div className="md:flex md:items-center md:justify-between py-4 px-6">
           <TypographyH3 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">

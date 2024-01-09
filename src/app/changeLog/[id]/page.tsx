@@ -36,7 +36,6 @@ const BlogDetail: FC<BlogDetailProp> = async ({ params }) => {
 
   return (
     <div>
-      <Navbar />
       <MaxWidthWrapper>
         <div className="flex flex-col items-center justify-center py-4">
           <TypographyH1

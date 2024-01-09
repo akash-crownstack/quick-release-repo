@@ -75,7 +75,6 @@ const AddChangeLog = () => {
 
   return (
     <>
-      <Navbar />
       <MaxWidthWrapper>
         <div className="flex flex-col items-center justify-center">
           <Form {...form}>

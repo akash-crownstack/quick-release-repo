@@ -5,7 +5,7 @@ import Provider from "@/components/Provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import AuthProvider from "./context/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -33,6 +33,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <Provider>
+              <Navbar />
               <div className="">{children}</div>
               <Toaster />
             </Provider>
