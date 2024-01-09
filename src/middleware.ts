@@ -25,5 +25,5 @@ export function middleware(request: NextRequest) {
   }
 }
 export const config = {
-  matcher: ["/allLogs", "/", "/register"],
+  matcher: ["/allLogs", "/", "/register", "/changeLog/add"],
 };
