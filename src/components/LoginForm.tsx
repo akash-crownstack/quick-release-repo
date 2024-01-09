@@ -123,7 +123,7 @@ const LoginForm = () => {
             <Button type="submit" className="px-6">
               {loader ? (
                 <>
-                  <span className="px-2">Log In </span>
+                  <span className="px-2">Sign In </span>
                   <Loader />
                 </>
               ) : (
