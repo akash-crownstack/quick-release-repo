@@ -164,11 +164,11 @@ const AddChangeLog = () => {
                   />
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button
-                  className="inline-flex divide-x divide-indigo-700 rounded-md shadow-sm"
-                  type="submit"
-                >
+              <CardFooter className="justify-end">
+                <Button className="mr-4 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded">
+                  Cancel
+                </Button>
+                <Button className="" type="submit">
                   Create Change Log
                 </Button>
               </CardFooter>
