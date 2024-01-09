@@ -23,7 +23,6 @@ import axios from "axios";
 import React, { use, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
-import { Label } from "@/components/ui/label";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Tiptap from "@/components/Tiptap";
 import { FormChangeLogPost } from "@/types";
@@ -78,12 +77,14 @@ const AddChangeLog = () => {
     <>
       <Navbar />
       <MaxWidthWrapper>
-        <Card>
+        <div className="flex flex-col items-center justify-center">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleCreatePost)}>
               <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl">Add New Change Log</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg font-medium leading-6 text-gray-900">
+                  Add New Change Log
+                </CardTitle>
+                <CardDescription className="mt-1 text-sm text-gray-500">
                   Let’s get started by filling in the information below to
                   create your new changelog.
                 </CardDescription>
@@ -164,13 +165,16 @@ const AddChangeLog = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" type="submit">
+                <Button
+                  className="inline-flex divide-x divide-indigo-700 rounded-md shadow-sm"
+                  type="submit"
+                >
                   Create Change Log
                 </Button>
               </CardFooter>
             </form>
           </Form>
-        </Card>
+        </div>
       </MaxWidthWrapper>
     </>
   );
