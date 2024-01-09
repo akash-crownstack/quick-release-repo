@@ -10,6 +10,26 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
+  cookies: {
+    csrfToken: {
+      name: "auth-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: true,
+      },
+    },
+    sessionToken: {
+      name: "session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: true,
+      },
+    },
+  },
 
   providers: [
     CredentialsProvider({
