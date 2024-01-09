@@ -78,7 +78,7 @@ const AddChangeLog = () => {
     <>
       <Navbar />
       <MaxWidthWrapper>
-        <Card>
+        <Card className="mx-12 my-8">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleCreatePost)}>
               <CardHeader className="space-y-1">
@@ -163,8 +163,11 @@ const AddChangeLog = () => {
                   />
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button className="w-full" type="submit">
+              <CardFooter className="justify-end">
+                <Button className="mr-4 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded">
+                  Cancel
+                </Button>
+                <Button className="" type="submit">
                   Create Change Log
                 </Button>
               </CardFooter>

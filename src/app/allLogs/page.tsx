@@ -1,7 +1,7 @@
 import { DateFormat } from "@/Utils/date-format";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Navbar } from "@/components/Navbar";
-import { TypographyH3, TypographyP } from "@/components/Typography";
+import { TypographyH1, TypographyH3, TypographyP } from "@/components/Typography";
 import { db } from "@/lib/db";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -31,12 +31,12 @@ export default async function AllLogs() {
       <Navbar />
       <MaxWidthWrapper>
         <div className="flex justify-between ">
-          <TypographyH3>Change Logs</TypographyH3>
+          <TypographyH1>Change Logs</TypographyH1>
           <Link
             href="/changeLog/add"
-            className="bg-primary p-1 rounded-md text-black text-md font-medium"
+            className="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Create Logs
+            Add New
           </Link>
         </div>
         <main className="grid items-center justify-center md:grid-cols-4 lg:grid-cols-4 gap-4 mt-10">
