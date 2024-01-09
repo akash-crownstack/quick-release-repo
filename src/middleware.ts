@@ -6,14 +6,20 @@ export function middleware(request: NextRequest) {
 
   if (
     !token &&
-    !(request.nextUrl.pathname === "/") &&
-    !(request.nextUrl.pathname === "/register")
+    (request.nextUrl.pathname === "/" ||
+      request.nextUrl.pathname === "/register")
   ) {
+    return NextResponse.next();
+  }
+
+  if (!token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
+
   if (
-    (token && request.nextUrl.pathname === "/") ||
-    request.nextUrl.pathname === "/register"
+    token &&
+    (request.nextUrl.pathname === "/" ||
+      request.nextUrl.pathname === "/register")
   ) {
     return NextResponse.redirect(new URL("/allLogs", request.url));
   }
