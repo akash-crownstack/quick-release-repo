@@ -21,7 +21,6 @@ import {
 } from "./ui/form";
 
 const LoginForm = () => {
-  const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
 
   const [loader, setLoader] = useState(false);
@@ -65,9 +64,8 @@ const LoginForm = () => {
         toast({
           title: error ? "Invalid Credentials" : "",
         });
+        setLoader(false);
       }
-    } finally {
-      setLoader(false);
     }
   }
   return (
