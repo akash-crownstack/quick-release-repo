@@ -42,7 +42,7 @@ const AddChangeLog = () => {
     releaseVersion: z.string().min(1, { message: "Required" }).max(50, {
       message: "Last Name can be maximum 50 characters",
     }),
-    // releaseCategory: z.string().min(1, { message: "Required" }).max(50, {
+    // releaseTags: z.string().min(1, { message: "Required" }).max(50, {
     //   message: "Last Name can be maximum 50 characters",
     // }),
     releaseTags: z

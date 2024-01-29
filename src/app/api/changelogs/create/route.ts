@@ -9,7 +9,7 @@ export async function POST(req: Request) {
                 title: body.title,
                 description: body.description,
                 releaseVersion: body.releaseVersion,
-                releaseCategory: body.releaseCategory
+                releaseTags: body.releaseTags
             }
         });
         return NextResponse.json(post, {status: 200})

@@ -23,7 +23,7 @@ const getPost = async (id: string) => {
       title: true,
       description: true,
       releaseVersion: true,
-      releaseCategory: true,
+      releaseTags: true,
       createdAt: true,
     },
   });

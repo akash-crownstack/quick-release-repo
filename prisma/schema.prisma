@@ -48,7 +48,7 @@ model Logs {
   title          String
   description    String
   releaseVersion String
-  releaseTag     Json[]
+  releaseTags    Json[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
