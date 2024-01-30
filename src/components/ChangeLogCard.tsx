@@ -72,12 +72,14 @@ const posts = [
   // More posts...
 ];
 
+type JsonArray = JSON[];
+
 interface ChangeLogCardProps {
   changeLogs: {
     log_id: string;
     title: string;
     description: string;
-    releaseCategory: string;
+    releaseTags: any;
     releaseVersion: string;
     createdAt: Date;
   }[];

@@ -16,7 +16,7 @@ const getPosts = async () => {
       log_id: true,
       title: true,
       description: true,
-      releaseCategory: true,
+      releaseTags: true,
       releaseVersion: true,
       createdAt: true,
     },

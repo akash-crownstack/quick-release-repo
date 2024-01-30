@@ -46,7 +46,7 @@ CREATE TABLE "Logs" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "releaseVersion" TEXT NOT NULL,
-    "releaseCategory" TEXT NOT NULL,
+    "releaseTags" JSONB[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

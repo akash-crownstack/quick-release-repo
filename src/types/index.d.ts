@@ -3,11 +3,16 @@ export type FormInputPost = {
   content: string;
   tagId: string;
 };
+
+export interface ReleaseTagsOption {
+  readonly value: string;
+  readonly label: string;
+}
 export type FormChangeLogPost = {
   title: string;
   description: string;
   releaseVersion: string;
-  releaseCategory: string;
+  releaseTags: readonly ReleaseTagsOption[];
 };
 
 export interface User {

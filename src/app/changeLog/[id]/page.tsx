@@ -23,7 +23,7 @@ const getPost = async (id: string) => {
       title: true,
       description: true,
       releaseVersion: true,
-      releaseCategory: true,
+      releaseTags: true,
       createdAt: true,
     },
   });
@@ -49,7 +49,6 @@ const BlogDetail: FC<BlogDetailProp> = async ({ params }) => {
             )} as Version ${changelog?.releaseVersion}`}
           />
           <p className="py-12">{parse(changelog?.description as any)}</p>
-          <h1>{changelog?.releaseCategory}</h1>
         </div>
       </MaxWidthWrapper>
     </div>
