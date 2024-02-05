@@ -61,6 +61,7 @@ const handler = NextAuth({
         );
         if (passwordCorrect) {
           return {
+            user: user,
             id: user.id,
             email: user.email,
           };
@@ -69,10 +70,31 @@ const handler = NextAuth({
           throw new Error("Incorrect Password!");
         }
 
-        return null;
+        return user;
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        return {
+          ...token,
+          id: user.id,
+        };
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+        },
+      };
+      return session;
+    },
+  },
 });
 
 export { handler as GET, handler as POST };

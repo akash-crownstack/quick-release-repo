@@ -53,6 +53,7 @@ const LoginForm = () => {
         password: values.password,
         redirect: false,
       });
+      localStorage.setItem("userData", JSON.stringify(res));
       if (!res?.error) router.push("/allLogs");
       if (res?.error) {
         toast({
