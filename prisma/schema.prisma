@@ -11,44 +11,48 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model Tag {
-  id   String @id @default(cuid())
-  name String @db.VarChar(100)
-  Post Post[]
-}
-
-model Post {
-  id        String   @id @default(cuid())
-  title     String   @db.VarChar(225)
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tagId     String
-  tag       Tag      @relation(fields: [tagId], references: [id])
-}
-
 model User {
-  id               String   @id @default(cuid())
+  id               String        @id @default(cuid())
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
   firstName        String
   lastName         String
-  email            String   @unique
-  orgName          String   @unique
-  createdAt        DateTime @default(now())
+  email            String        @unique
   password         String
-  resetToken       String?  @unique
+  resetToken       String?       @unique
   resetTokenExpiry String?
+  role             String        @default("ADMIN")
+  organisationId   String        @unique @default(cuid())
+  organisation     Organisation? @relation(fields: [organisationId], references: [id])
+  projects         Project[]
 }
 
 model Organisation {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  admin     User?
+  name      String
 }
 
-model Logs {
-  log_id         String   @id @default(cuid())
+model Project {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  logs      Log[]
+  User      User?    @relation(fields: [adminId], references: [id])
+  adminId   String?
+}
+
+model Log {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
   title          String
   description    String
   releaseVersion String
-  releaseTags    Json[]
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  releaseTags    String[]
+  Project        Project? @relation(fields: [projectId], references: [id])
+  projectId      String?
 }
