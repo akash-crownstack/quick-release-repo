@@ -6,11 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") 
-  directUrl = env("POSTGRES_URL_NON_POOLING") 
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
-
 
 model Tag {
   id   String @id @default(cuid())
@@ -29,14 +28,14 @@ model Post {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  firstName String
-  lastName  String
-  email     String   @unique
-  orgName   String   @unique
-  createdAt DateTime @default(now())
-  password  String
-  resetToken String? @unique
+  id               String   @id @default(cuid())
+  firstName        String
+  lastName         String
+  email            String   @unique
+  orgName          String   @unique
+  createdAt        DateTime @default(now())
+  password         String
+  resetToken       String?  @unique
   resetTokenExpiry String?
 }
 
@@ -45,11 +44,11 @@ model Organisation {
 }
 
 model Logs {
-  log_id          String @id @default(cuid())
-  title           String
-  description     String
-  releaseVersion  String
-  releaseCategory String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  log_id         String   @id @default(cuid())
+  title          String
+  description    String
+  releaseVersion String
+  releaseTags    Json[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

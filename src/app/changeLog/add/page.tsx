@@ -21,14 +21,15 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import React, { use, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import * as z from "zod";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Tiptap from "@/components/Tiptap";
-import { FormChangeLogPost } from "@/types";
+import { FormChangeLogPost, ReleaseTagsOption } from "@/types";
 import { useMutation } from "react-query";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
+import Select from "react-select";
 
 const AddChangeLog = () => {
   const router = useRouter();
@@ -41,9 +42,25 @@ const AddChangeLog = () => {
     releaseVersion: z.string().min(1, { message: "Required" }).max(50, {
       message: "Last Name can be maximum 50 characters",
     }),
-    releaseCategory: z.string().min(1, { message: "Required" }).max(50, {
-      message: "Last Name can be maximum 50 characters",
-    }),
+    // releaseTags: z.string().min(1, { message: "Required" }).max(50, {
+    //   message: "Last Name can be maximum 50 characters",
+    // }),
+    releaseTags: z
+      .array(
+        z.object({
+          value: z
+            .string()
+            .min(0, { message: "At least one category is required" })
+            .max(50, { message: "Category can be maximum 50 characters" }),
+          label: z
+            .string()
+            .min(0, { message: "At least one category is required" })
+            .max(50, { message: "Category can be maximum 50 characters" }),
+        })
+      )
+      .refine((arr) => arr.length >= 0, {
+        message: "At least one category is required",
+      }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,12 +69,13 @@ const AddChangeLog = () => {
       title: "",
       description: "",
       releaseVersion: "",
-      releaseCategory: "",
+      releaseTags: [],
     },
   });
 
   const handleCreatePost: SubmitHandler<FormChangeLogPost> = (data) => {
     createPost(data);
+    console.log(data);
   };
 
   const { mutate: createPost, isLoading } = useMutation({
@@ -72,6 +90,11 @@ const AddChangeLog = () => {
       router.refresh();
     },
   });
+  const releaseTagsOptions: readonly ReleaseTagsOption[] = [
+    { value: "published", label: "Published" },
+    { value: "draft", label: "Draft" },
+    { value: "archived", label: "Archived" },
+  ];
 
   return (
     <>
@@ -147,14 +170,30 @@ const AddChangeLog = () => {
                 <div className="grid gap-2">
                   <FormField
                     control={form.control}
-                    name="releaseCategory"
+                    name="releaseTags"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Release Category</FormLabel>
+                        <FormLabel>Release Tags (Optional)</FormLabel>
                         <FormControl>
-                          <Input
-                            placeholder="Enter release category"
-                            {...field}
+                          <Controller
+                            name="releaseTags"
+                            control={form.control}
+                            render={({
+                              field: { onChange, onBlur, value, name },
+                            }) => (
+                              <Select
+                                isMulti
+                                name={name}
+                                options={releaseTagsOptions}
+                                className="basic-multi-select"
+                                classNamePrefix="select"
+                                onBlur={onBlur}
+                                onChange={(selectedOptions) => {
+                                  onChange(selectedOptions);
+                                }}
+                                value={value}
+                              />
+                            )}
                           />
                         </FormControl>
                         <FormMessage className="text-red-600" />
@@ -163,11 +202,11 @@ const AddChangeLog = () => {
                   />
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button
-                  className="inline-flex divide-x divide-indigo-700 rounded-md shadow-sm"
-                  type="submit"
-                >
+              <CardFooter className="justify-end">
+                <Button className="mr-4 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded">
+                  Cancel
+                </Button>
+                <Button className="" type="submit">
                   Create Change Log
                 </Button>
               </CardFooter>
