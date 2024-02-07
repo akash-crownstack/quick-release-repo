@@ -10,8 +10,8 @@ export async function POST(request: Request, res: NextApiResponse) {
     const existingEmail = await db.user.findUnique({
       where: { email: body.email },
     });
-    const existingOrgName = await db.user.findUnique({
-      where: { orgName: body.orgName },
+    const existingOrgName = await db.organisation.findUnique({
+      where: { name: body.orgName },
     });
     if (existingEmail) {
       return NextResponse.json({
@@ -25,18 +25,23 @@ export async function POST(request: Request, res: NextApiResponse) {
         status: 400,
       });
     }
+    const organisation = await db.organisation.create({
+      data: {
+        name: body.orgName,
+      },
+    });
     const register = await db.user.create({
       data: {
         email: body.email,
         password: hashedPassword,
         firstName: body.firstName,
         lastName: body.lastName,
-        orgName: body.orgName,
+        organisationId: organisation.id,
       },
     });
     return NextResponse.json({
       status: 200,
-      message: "Registered Successfully",
+      message: "Registered` Successfully",
       register,
     });
   } catch (e) {

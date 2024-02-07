@@ -22,7 +22,7 @@ export function Navbar() {
   const [loader, setLoader] = React.useState(false);
   const session = useSession();
   const pathname = usePathname();
-
+  console.log(router, "router");
   const handleLogout = async () => {
     setLoader(true);
     try {
@@ -39,12 +39,15 @@ export function Navbar() {
   };
   return (
     <>
-      {pathname === "/" || pathname === "/register" ? null : (
+      {pathname === "/" ||
+      pathname === "/register" ||
+      pathname === "/forget-password" ||
+      pathname === "/reset-password/:id" ? null : (
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }: any) => (
             <>
-              <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                <div className="relative flex h-16 items-center justify-between">
+              <div className="px-2 sm:px-6 lg:px-8">
+                <div className="relative flex h-16 items-center justify-around">
                   <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                     {/* Mobile menu button*/}
                     <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">

@@ -32,7 +32,6 @@ const getPost = async (id: string) => {
 
 const BlogDetail: FC<BlogDetailProp> = async ({ params }) => {
   const changelog = await getPost(params.id);
-  console.log("Change Log", changelog?.title);
 
   return (
     <div>

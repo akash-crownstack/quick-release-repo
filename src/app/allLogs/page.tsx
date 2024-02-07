@@ -10,30 +10,28 @@ import React from "react";
 import ChangeLogCard from "@/components/ChangeLogCard";
 import ChangeLogDetail from "@/components/ChangeLogDetail";
 
-const getPosts = async () => {
-  const response = await db.logs.findMany({
-    select: {
-      log_id: true,
-      title: true,
-      description: true,
-      releaseTags: true,
-      releaseVersion: true,
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-  return response;
-};
+// const getPosts = async () => {
+//   const response = await db.logs.findMany({
+//     select: {
+//       log_id: true,
+//       title: true,
+//       description: true,
+//       releaseTags: true,
+//       releaseVersion: true,
+//       createdAt: true,
+//     },
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//   });
+//   return response;
+// };
 
 export default async function AllLogs({ req }: any) {
-  const changeLogs = await getPosts();
+  // const changeLogs = await getPosts();
 
   return (
     <>
-      <Navbar />
-
       <div className="md:flex md:items-center md:justify-between py-4 px-6">
         <TypographyH3 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
           Change Logs
@@ -57,7 +55,7 @@ export default async function AllLogs({ req }: any) {
             </Link>
           ))} */}
         <div className="col-span-1 bg-gray-100 border border-t-0">
-          <ChangeLogCard changeLogs={changeLogs} />
+          {/* <ChangeLogCard changeLogs={changeLogs} /> */}
         </div>
         <div className="col-span-2 bg-gray-100">
           <ChangeLogDetail />
