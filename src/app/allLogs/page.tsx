@@ -11,9 +11,9 @@ import ChangeLogCard from "@/components/ChangeLogCard";
 import ChangeLogDetail from "@/components/ChangeLogDetail";
 
 const getPosts = async () => {
-  const response = await db.logs.findMany({
+  const response = await db.log.findMany({
     select: {
-      log_id: true,
+      id: true,
       title: true,
       description: true,
       releaseTags: true,
