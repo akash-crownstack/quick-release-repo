@@ -20,9 +20,7 @@ function classNames(...classes: any) {
 export function Navbar() {
   const router = useRouter();
   const [loader, setLoader] = React.useState(false);
-  const session = useSession();
   const pathname = usePathname();
-  console.log(router, "router");
   const handleLogout = async () => {
     setLoader(true);
     try {

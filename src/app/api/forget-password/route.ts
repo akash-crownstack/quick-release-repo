@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
   existingUser.resetToken = passwordResetToken;
   existingUser.resetTokenExpiry = passwordResetExpires;
-  const resetUrl = `localhost:3000/reset-password/${resetToken}`;
+  const resetUrl = `${process.env.BASEURL}/reset-password/${resetToken}`;
 
   const emailBody = "Reset Password by clicking on following url:" + resetUrl;
 

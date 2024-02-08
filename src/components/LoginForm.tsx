@@ -54,7 +54,7 @@ const LoginForm = () => {
         redirect: false,
       });
       localStorage.setItem("userData", JSON.stringify(res));
-      if (!res?.error) router.push("/products");
+      if (!res?.error) router.push("/projects");
       if (res?.error) {
         toast({
           title: res?.error as string,

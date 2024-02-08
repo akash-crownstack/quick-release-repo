@@ -9,6 +9,7 @@ const handler = NextAuth({
   },
   session: {
     strategy: "jwt",
+    maxAge: 1 * 60 * 60, //1 hour,
   },
   cookies: {
     csrfToken: {
@@ -22,6 +23,7 @@ const handler = NextAuth({
     },
     sessionToken: {
       name: "session-token",
+
       options: {
         httpOnly: true,
         sameSite: "lax",
@@ -40,37 +42,34 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials, req) {
-        const response = await db.user.findMany({
-          where: {
-            email: credentials?.email,
-          },
-        });
-        const user = response[0];
         const uniqueUser = await db.user.findUnique({
           where: {
             email: credentials?.email,
           },
         });
         if (!uniqueUser) {
-          throw new Error("Email Not registered!");
+          throw new Error("InCorrect Credentials!");
+        }
+        if (uniqueUser && uniqueUser.isActive === false) {
+          throw new Error("Your Access has been Restricted, Contact Admin");
         }
 
         const passwordCorrect = await compare(
           credentials?.password || "",
-          user.password
+          uniqueUser.password
         );
         if (passwordCorrect) {
           return {
-            user: user,
-            id: user.id,
-            email: user.email,
+            user: uniqueUser,
+            id: uniqueUser.id,
+            email: uniqueUser.email,
           };
         }
         if (!passwordCorrect) {
-          throw new Error("Incorrect Password!");
+          throw new Error("Incorrect Credentials!");
         }
 
-        return user;
+        return uniqueUser;
       },
     }),
   ],
