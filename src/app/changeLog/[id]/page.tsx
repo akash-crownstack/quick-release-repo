@@ -14,12 +14,12 @@ interface BlogDetailProp {
 }
 
 const getPost = async (id: string) => {
-  const response = await db.logs.findFirst({
+  const response = await db.log.findFirst({
     where: {
-      log_id: id,
+      id,
     },
     select: {
-      log_id: true,
+      id: true,
       title: true,
       description: true,
       releaseVersion: true,

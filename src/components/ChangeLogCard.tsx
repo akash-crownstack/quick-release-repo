@@ -76,7 +76,7 @@ type JsonArray = JSON[];
 
 interface ChangeLogCardProps {
   changeLogs: {
-    log_id: string;
+    id: string;
     title: string;
     description: string;
     releaseTags: any;
@@ -92,7 +92,7 @@ const ChangeLogCard: FC<ChangeLogCardProps> = async ({ changeLogs }) => {
       <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-6 border-gray-200 pt-1  lg:mx-0 lg:max-w-none lg:grid-cols-1">
         {changeLogs.map((changeLog) => (
           <article
-            key={changeLog.log_id}
+            key={changeLog.id}
             className="flex max-w-xl flex-col items-start justify-between border-b px-4 py-2"
           >
             <div className="group relative w-full">
