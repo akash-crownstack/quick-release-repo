@@ -34,13 +34,12 @@ const Project = () => {
       const response = await axios.post(`api/add-project/${userId}`, {
         project,
       });
+      toast({
+        title: response.data.message,
+      });
+      router.push("/projects");
     } catch (error) {
-      if (error) {
-        toast({
-          title: error as string,
-        });
-        setLoader(false);
-      }
+      console.log(error);
     }
   }
 
@@ -49,14 +48,8 @@ const Project = () => {
       <div className="bg-white shadow sm:rounded-lg">
         <div className="px-4 py-5 sm:p-6">
           <h3 className="text-base font-semibold leading-6 text-gray-900">
-            Create Your Team
+            Create Project
           </h3>{" "}
-          <div className="mt-2 w-full text-sm text-gray-500">
-            <p>
-              Please select a name for your team. This will be used as slug to
-              create a URL for your product as well.
-            </p>
-          </div>
           <form
             className="mt-5 sm:flex sm:items-center"
             onSubmit={handleSubmit}
@@ -87,9 +80,6 @@ const Project = () => {
               Save
             </button>
           </form>
-          <p className="mt-2 text-sm text-red-600" id="email-error">
-            The team name is already taken. Please select another.
-          </p>
         </div>
       </div>
     </main>

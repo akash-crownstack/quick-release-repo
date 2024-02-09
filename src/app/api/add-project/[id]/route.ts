@@ -7,11 +7,14 @@ export async function POST(
 ) {
   try {
     const body = await request.json();
-    const existingProject = await db.project.findFirstOrThrow({
+    const existingProject = await db.project.findFirst({
       where: { name: body.project, adminId: params.id },
     });
     if (existingProject) {
-      return new Response(`Projects with this Name Already Exists`);
+      return NextResponse.json({
+        status: 400,
+        message: "Project with this name already exists",
+      });
     }
     const project = await db.project.create({
       data: {
@@ -25,6 +28,7 @@ export async function POST(
       project,
     });
   } catch (e) {
-    return NextResponse.json({ error: "Error" }, { status: 500 });
+    console.log(e, "error");
+    return NextResponse.json(e, { status: 500 });
   }
 }
