@@ -16,9 +16,11 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Loader } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const [loader, setLoader] = useState(false);
+  const router = useRouter();
   const { toast } = useToast();
   const formSchema = z.object({
     firstName: z.string().min(1, { message: "Required" }).max(50, {
@@ -57,6 +59,7 @@ const RegisterForm = () => {
       toast({
         title: response.data.message,
       });
+      router.push("/");
     } catch (e) {
       console.log(e);
     } finally {

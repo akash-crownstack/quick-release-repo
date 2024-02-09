@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import Link from "next/link";
-import Loader from "@/components/Loader";
 import { Oval } from "react-loader-spinner";
 
 const Projects = () => {
@@ -32,15 +31,18 @@ const Projects = () => {
     fetchData();
   }, [userId]);
   return (
-    <div className="flex items-center justify-center text-center h-[100vh] gap-5 ">
-      {loading ? <Oval color="#4fa94d" /> : null}
-      {projects.map((item: any) => {
-        return (
-          <div className="border shadow-xl px-4 py-16 rounded-xl bg-blue-100 text-black font-bold w-40 h-40 cursor-pointer">
-            <p className="">{item?.name}</p>
-          </div>
-        );
-      })}
+    <div className="flex items-center justify-center text-center h-[100vh] gap-5">
+      {loading ? (
+        <Oval color="#FFFFFF" secondaryColor="#000000" />
+      ) : (
+        projects.map((item: any) => {
+          return (
+            <div className="border shadow-xl px-4 py-16 rounded-xl bg-blue-100 text-black font-bold w-40 h-40 cursor-pointer">
+              <p className="">{item?.name}</p>
+            </div>
+          );
+        })
+      )}
 
       <Link
         href={"/create-project"}

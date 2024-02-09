@@ -8,10 +8,14 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import Loader from "./Loader";
 
-const navigation = [{ name: "Quick Release", href: "/allLogs", current: true }];
+const navigation = [
+  { name: "Quick Release", href: "/allLogs", current: true },
+  { name: "Projects", href: "/projects", current: true },
+];
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -19,8 +23,9 @@ function classNames(...classes: any) {
 
 export function Navbar() {
   const router = useRouter();
-  const [loader, setLoader] = React.useState(false);
   const pathname = usePathname();
+  const params = useParams();
+  const [loader, setLoader] = React.useState(false);
   const handleLogout = async () => {
     setLoader(true);
     try {
@@ -40,7 +45,7 @@ export function Navbar() {
       {pathname === "/" ||
       pathname === "/register" ||
       pathname === "/forget-password" ||
-      pathname === "/reset-password/:id" ? null : (
+      pathname === `/reset-password/${params.token}` ? null : (
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }: any) => (
             <>
