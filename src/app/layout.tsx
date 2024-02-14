@@ -34,7 +34,7 @@ export default async function RootLayout({
           >
             <Provider>
               <Navbar />
-              <div className="">{children}</div>
+              <div className="bg-gray-50 dark:bg-gray-900">{children}</div>
               <Toaster />
             </Provider>
           </ThemeProvider>

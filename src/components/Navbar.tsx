@@ -11,10 +11,12 @@ import { usePathname } from "next/navigation";
 import { useParams } from "next/navigation";
 
 import Loader from "./Loader";
+import Link from "next/link";
+import axios from "axios";
 
 const navigation = [
   { name: "Quick Release", href: "/allLogs", current: true },
-  { name: "Projects", href: "/projects", current: true },
+  // { name: "Projects", href: "/projects", current: true },
 ];
 
 function classNames(...classes: any) {
@@ -23,8 +25,35 @@ function classNames(...classes: any) {
 
 export function Navbar() {
   const router = useRouter();
+  const { data } = useSession();
   const pathname = usePathname();
   const params = useParams();
+  const [projects, setProjects] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const userId = (data?.user as { id: string })?.id;
+  console.log(data, "data");
+
+  const getProjects = async () => {
+    setLoading(true);
+    try {
+      const projects = await axios.get(`/api/get-projects/${userId}`);
+      setProjects(projects.data);
+    } catch (err) {
+      console.log(err, "error");
+    }
+    setLoading(false);
+  };
+  console.log(projects, "projects");
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (userId) {
+        await getProjects();
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
   const [loader, setLoader] = React.useState(false);
   const handleLogout = async () => {
     setLoader(true);
@@ -122,6 +151,57 @@ export function Navbar() {
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <Menu.Item>
                             {({ active }) => (
+                              <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                                <div className="font-medium truncate">
+                                  {data?.user?.email}
+                                </div>
+                              </div>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            <Link
+                              href="/create-project"
+                              className="flex items-center px-4 py-2 text-sm font-medium text-blue-600 border-t border-gray-200 bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500 hover:underline"
+                            >
+                              <svg
+                                className="w-4 h-4 me-1"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                ></path>
+                              </svg>
+                              Add new project
+                            </Link>
+                          </Menu.Item>
+                          <Menu.Item>
+                            <ul
+                              className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                              aria-labelledby="dropdownInformationButton"
+                            >
+                              {projects.map((item: any) => {
+                                return (
+                                  <li>
+                                    <a
+                                      href="#"
+                                      className="flex  px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    >
+                                      {item.name}
+                                    </a>
+                                  </li>
+                                );
+                              })}{" "}
+                            </ul>
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
                               <a
                                 onClick={handleLogout}
                                 className={classNames(
@@ -130,13 +210,17 @@ export function Navbar() {
                                 )}
                               >
                                 {loader ? (
-                                  <div className="flex justify-center items-center gap-4">
-                                    <span className="text-l">Sign out</span>
+                                  <div className="flex  items-center gap-4">
+                                    <span className="text-l font-bold">
+                                      Sign out
+                                    </span>
                                     <Loader width="w-6" color="border-black" />
                                   </div>
                                 ) : (
-                                  <div className="flex justify-center items-center">
-                                    <span className="text-l">Sign out</span>
+                                  <div className="flex  items-center">
+                                    <span className="text-l font-bold">
+                                      Sign out
+                                    </span>
                                   </div>
                                 )}
                               </a>
