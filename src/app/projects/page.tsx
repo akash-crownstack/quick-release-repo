@@ -21,6 +21,7 @@ const Projects = () => {
     }
     setLoading(false);
   };
+  console.log(projects);
   useEffect(() => {
     const fetchData = async () => {
       if (userId) {
@@ -35,7 +36,7 @@ const Projects = () => {
       {loading ? (
         <Oval color="#FFFFFF" secondaryColor="#000000" />
       ) : (
-        projects.map((item: any) => {
+        projects?.map((item: any) => {
           return (
             <div className="border shadow-xl px-4 py-16 rounded-xl bg-blue-100 text-black font-bold w-40 h-40 cursor-pointer">
               <p className="">{item?.name}</p>

@@ -23,7 +23,7 @@ model User {
   resetTokenExpiry String?
   isActive         Boolean       @default(true)
   role             String        @default("ADMIN")
-  organisationId   String        @unique @default(cuid())
+  organisationId   String        @unique
   organisation     Organisation? @relation(fields: [organisationId], references: [id])
   projects         Project[]
 }
@@ -40,10 +40,11 @@ model Project {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String
+  name      String   @unique
   logs      Log[]
   User      User?    @relation(fields: [adminId], references: [id])
   adminId   String?
+  isActive  Boolean  @default(false)
 }
 
 model Log {

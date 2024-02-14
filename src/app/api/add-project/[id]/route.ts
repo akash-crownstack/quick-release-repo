@@ -7,18 +7,16 @@ export async function POST(
 ) {
   try {
     const body = await request.json();
+    console.log(body, "body");
     const existingProject = await db.project.findFirst({
-      where: { name: body.project, adminId: params.id },
+      where: { name: body.projects, adminId: params.id },
     });
     if (existingProject) {
-      return NextResponse.json({
-        status: 400,
-        message: "Project with this name already exists",
-      });
+      throw new Error("Project with this name already exists");
     }
     const project = await db.project.create({
       data: {
-        name: body.project,
+        name: body.projects,
         adminId: params.id,
       },
     });
@@ -27,8 +25,13 @@ export async function POST(
       message: "Created Successfully",
       project,
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log(e, "error");
-    return NextResponse.json(e, { status: 500 });
+    return NextResponse.json(
+      {
+        message: e.message,
+      },
+      { status: 400 }
+    );
   }
 }
