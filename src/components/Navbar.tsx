@@ -9,15 +9,12 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import Loader from "./Loader";
 import Link from "next/link";
 import axios from "axios";
-
-const navigation = [
-  { name: "Quick Release", href: "/allLogs", current: true },
-  // { name: "Projects", href: "/projects", current: true },
-];
+import { Oval } from "react-loader-spinner";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -30,8 +27,18 @@ export function Navbar() {
   const params = useParams();
   const [projects, setProjects] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [projectLoading, setProjectLoading] = React.useState(false);
   const userId = (data?.user as { id: string })?.id;
-  console.log(data, "data");
+
+  let active = null;
+  if (typeof localStorage !== "undefined") {
+    const activeItem = localStorage.getItem("activeProject");
+    if (activeItem) {
+      active = JSON.parse(activeItem);
+    }
+  } else {
+    console.log("localStorage is not available in this environment.");
+  }
 
   const getProjects = async () => {
     setLoading(true);
@@ -43,7 +50,6 @@ export function Navbar() {
     }
     setLoading(false);
   };
-  console.log(projects, "projects");
   React.useEffect(() => {
     const fetchData = async () => {
       if (userId) {
@@ -69,6 +75,33 @@ export function Navbar() {
       setLoader(false);
     }
   };
+
+  const activeProject = async (projectId: string) => {
+    try {
+      setProjectLoading(true);
+      const res = await axios.post(
+        `/api/active-project/${projectId}/${userId}`
+      );
+      const activatedProject: any = projects
+        .filter((item: any) => item.isActive === true)
+        .map((item: any) => item);
+      localStorage.setItem("activeProject", JSON.stringify(activatedProject));
+      router.push("/changeLog/add");
+    } catch (err) {
+      console.log("error", err);
+    }
+    setProjectLoading(false);
+  };
+
+  const navigation = [
+    { name: "Quick Release", href: "/allLogs", current: true },
+    {
+      name: active ? active.map((item: any) => item.name) : null,
+      href: "/allLogs",
+      current: true,
+    },
+  ];
+
   return (
     <>
       {pathname === "/" ||
@@ -188,16 +221,19 @@ export function Navbar() {
                             >
                               {projects.map((item: any) => {
                                 return (
-                                  <li>
-                                    <a
-                                      href="#"
-                                      className="flex  px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                  <div className="flex items-center">
+                                    <li
+                                      onClick={() => {
+                                        activeProject(item.id);
+                                      }}
                                     >
-                                      {item.name}
-                                    </a>
-                                  </li>
+                                      <div className="flex  px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        {item.name}
+                                      </div>
+                                    </li>
+                                  </div>
                                 );
-                              })}{" "}
+                              })}
                             </ul>
                           </Menu.Item>
                           <Menu.Item>

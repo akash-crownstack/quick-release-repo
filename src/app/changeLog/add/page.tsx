@@ -33,6 +33,16 @@ import Select from "react-select";
 
 const AddChangeLog = () => {
   const router = useRouter();
+  let active = [];
+  if (typeof localStorage !== "undefined") {
+    const activeItem = localStorage.getItem("activeProject");
+    if (activeItem) {
+      active = JSON.parse(activeItem);
+    }
+  } else {
+    console.log("localStorage is not available in this environment.");
+  }
+  const activeProjectId = active?.map((item: any) => item.id);
 
   const formSchema = z.object({
     title: z.string().min(1, { message: "Required" }).max(50, {
@@ -80,7 +90,7 @@ const AddChangeLog = () => {
 
   const { mutate: createPost, isLoading } = useMutation({
     mutationFn: (newPost: FormChangeLogPost) => {
-      return axios.post("/api/changelogs/create", newPost);
+      return axios.post(`/api/create-changeLogs/${activeProjectId}`, newPost);
     },
     onError: (err) => {
       console.error(err);

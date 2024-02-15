@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: Request, { params }: any) {
   try {
     const body = await req.json();
     const logs = await db.log.create({
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
         description: body.description,
         releaseVersion: body.releaseVersion,
         releaseTags: body.releaseTags,
-        projectId: "clscvobc90001swlj6v60ik6b",
+        projectId: params.id,
       },
     });
     return NextResponse.json(logs, { status: 200 });
