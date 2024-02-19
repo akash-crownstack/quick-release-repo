@@ -6,7 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import Provider from "@/components/Provider";
 import { getServerSession } from "next-auth";
 import "react-toastify/dist/ReactToastify.css";
-import { ClientLayout } from "./client-layout/page";
+import ClientLayout from "./client-layout/page";
 import { db } from "@/lib/db";
 import { useSession } from "next-auth/react";
 import { PropsWithChildren } from "react";
