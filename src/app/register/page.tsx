@@ -1,6 +1,5 @@
 "use client";
 
-import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -8,14 +7,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Oval } from "react-loader-spinner";
-import bcrypt from "bcryptjs";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [loader, setLoader] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
+
   const formSchema = z
     .object({
       firstName: z.string().min(1, { message: "Required" }).max(50, {
@@ -62,15 +61,11 @@ const Register = () => {
 
       const response = await axios.post("/api/register", values);
       setLoader(false);
-      toast({
-        title: response.data.message,
-      });
+      toast.success(response.data.message);
       router.push("/");
     } catch (e: any) {
       console.log(e);
-      toast({
-        title: e.response.data.message,
-      });
+      toast.error(e.response.data.message);
     } finally {
       setLoader(false);
     }

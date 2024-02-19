@@ -1,5 +1,4 @@
 "use client";
-import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
@@ -8,12 +7,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Oval } from "react-loader-spinner";
 import { z } from "zod";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const router = useRouter();
   const [loader, setLoader] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { toast } = useToast();
   const formSchema = z.object({
     email: z
       .string()
@@ -48,15 +47,11 @@ export default function LoginForm() {
       });
       if (!res?.error) router.push("/allLogs");
       if (res?.error) {
-        toast({
-          title: res?.error as string,
-        });
+        toast.error(res?.error as string);
       }
     } catch (error) {
       if (error) {
-        toast({
-          title: error ? "Invalid Credentials" : "",
-        });
+        toast.error(error ? "Invalid Credentials" : "");
       }
     }
     setLoader(false);
@@ -111,13 +106,13 @@ export default function LoginForm() {
                 >
                   Password
                 </label>{" "}
-                <div className="flex items-center focus-within:border-2 focus-within:border-black bg-gray-50 border rounded-lg">
+                <div className="flex items-center focus-within:border-2 focus-within:border-black focus-within:rounded-lg bg-gray-50 border rounded-lg">
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
                     placeholder="••••••••"
                     {...register("password")}
-                    className=" border-gray-300 text-gray-900 sm:text-sm focus:outline-none  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="  text-gray-900 sm:text-sm focus:outline-none block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                   {errors.password && (
                     <span className="text-red-600 text-[12px]">

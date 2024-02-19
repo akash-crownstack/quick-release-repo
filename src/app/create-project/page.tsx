@@ -1,24 +1,25 @@
 "use client";
-import React, { useState } from "react";
-import { useSession } from "next-auth/react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Oval } from "react-loader-spinner";
+import { toast } from "react-toastify";
+import { z } from "zod";
 
 const Project = () => {
   const { data } = useSession();
   const router = useRouter();
-  const [error, setError] = useState("");
-  const { toast } = useToast();
+  const [projects, setProjects] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
   const userId = (data?.user as { id: string })?.id;
 
   const [loader, setLoader] = useState(false);
   const formSchema = z.object({
-    projects: z.string().min(1, { message: "Required" }),
+    projects: z.string().min(3, { message: "Required" }),
   });
   const {
     register,
@@ -31,19 +32,39 @@ const Project = () => {
     },
   });
 
+  const getProjects = async () => {
+    setLoading(true);
+    try {
+      const projects = await axios.get(`/api/get-projects/${userId}`);
+      setProjects(projects.data);
+    } catch (err) {
+      console.log(err, "error");
+    }
+    setLoading(false);
+  };
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (userId) {
+        await getProjects();
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
   async function createProject(values: any, e: any) {
     e.preventDefault();
     try {
       setLoader(true);
-      const response = await axios.post(`api/add-project/${userId}`, values);
-      toast({
-        title: response.data.message,
+      const response = await axios.post(`api/add-project/${userId}`, {
+        projects: values.projects.trim(),
       });
-      setError("");
+      toast.success(response.data.message);
       router.push("/allLogs");
+      getProjects();
     } catch (error: any) {
       if (error) {
-        setError(error.response.data.message);
+        toast.error(error.response.data.message);
       }
     }
     setLoader(false);
@@ -102,7 +123,7 @@ const Project = () => {
             </button>
           </form>{" "}
           <p className="mt-2 text-sm text-red-600" id="email-error">
-            {error}
+            {errors.projects?.message}
           </p>
         </div>
       </div>

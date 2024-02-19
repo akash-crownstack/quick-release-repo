@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Provider from "@/components/Provider";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/Navbar";
-import { Toaster } from "@/components/ui/toaster";
-import { getServerSession } from "next-auth";
 import AuthProvider from "./context/AuthProvider";
+import { Navbar } from "@/components/Navbar";
+import Provider from "@/components/Provider";
+import { getServerSession } from "next-auth";
+import "react-toastify/dist/ReactToastify.css";
+import { ClientLayout } from "./client-layout/page";
+import { db } from "@/lib/db";
+import { useSession } from "next-auth/react";
+import { PropsWithChildren } from "react";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,18 +30,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider session={session}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Provider>
-              <Navbar />
-              <div className="bg-gray-50 dark:bg-gray-900">{children}</div>
-              <Toaster />
-            </Provider>
-          </ThemeProvider>
+          <ClientLayout children={children} />
         </AuthProvider>
       </body>
     </html>
