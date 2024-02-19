@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 
-export const ClientLayout = ({ children }: PropsWithChildren) => {
+const ClientLayout = ({ children }: PropsWithChildren) => {
   const session = useSession();
   const [isNavbarRendered, setIsNavbarRendered] = useState(false);
 
@@ -28,3 +28,5 @@ export const ClientLayout = ({ children }: PropsWithChildren) => {
     </>
   );
 };
+
+export default ClientLayout;
