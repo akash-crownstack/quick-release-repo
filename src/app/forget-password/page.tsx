@@ -1,5 +1,4 @@
 "use client";
-import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Link from "next/link";
@@ -7,10 +6,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Oval } from "react-loader-spinner";
 import { z } from "zod";
-
+import { toast } from "react-toastify";
 const ForgotPassword = () => {
   const [loader, setLoader] = useState(false);
-  const { toast } = useToast();
   const formSchema = z.object({
     email: z
       .string()
@@ -34,14 +32,10 @@ const ForgotPassword = () => {
     setLoader(true);
     try {
       const res = await axios.post("/api/forget-password", values);
-      toast({
-        title: "Reset Link Sent Successfully",
-      });
+      toast.success("Reset Link Sent Successfully");
       setLoader(false);
     } catch (e: any) {
-      toast({
-        title: e.response.data,
-      });
+      toast.error(e.response.data);
 
       setLoader(false);
     }

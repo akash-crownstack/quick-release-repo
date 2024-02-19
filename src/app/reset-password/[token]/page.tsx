@@ -1,6 +1,5 @@
 "use client";
 
-import { useToast } from "@/components/ui/use-toast";
 import { User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -10,7 +9,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Oval } from "react-loader-spinner";
 import { z } from "zod";
-import bcrypt from "bcryptjs";
+import { toast } from "react-toastify";
 
 const ResetPassword = ({ params }: any) => {
   const [verified, setVerified] = useState(false);
@@ -18,7 +17,6 @@ const ResetPassword = ({ params }: any) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loader, setLoader] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
   const formSchema = z
     .object({
       password: z
@@ -55,16 +53,12 @@ const ResetPassword = ({ params }: any) => {
 
     try {
       await axios.post("/api/reset-password", data);
-      toast({
-        title: "Reset Successfully",
-      });
+      toast.success("Reset Successfully");
       setLoader(false);
       router.push("/");
     } catch (error: any) {
       setLoader(false);
-      toast({
-        title: error.response.data,
-      });
+      toast.error(error.response.data);
     }
   };
 

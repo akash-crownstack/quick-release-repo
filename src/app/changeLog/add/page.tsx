@@ -1,14 +1,9 @@
 "use client";
 
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import { Navbar } from "@/components/Navbar";
+import Tiptap from "@/components/Tiptap";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import {
   Card,
   CardContent,
@@ -17,19 +12,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { FormChangeLogPost, ReleaseTagsOption } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { use, useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import * as z from "zod";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import Tiptap from "@/components/Tiptap";
-import { FormChangeLogPost, ReleaseTagsOption } from "@/types";
 import { useMutation } from "react-query";
-import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/Navbar";
 import Select from "react-select";
+import * as z from "zod";
 
 const AddChangeLog = () => {
   const router = useRouter();
@@ -216,7 +216,7 @@ const AddChangeLog = () => {
                 <Button className="mr-4 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded">
                   Cancel
                 </Button>
-                <Button className="" type="submit">
+                <Button className="bg-blue-500 text-white" type="submit">
                   Create Change Log
                 </Button>
               </CardFooter>

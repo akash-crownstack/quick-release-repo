@@ -1,10 +1,11 @@
 "use client";
-import { TypographyH3, TypographyP } from "@/components/Typography";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+
 import ChangeLogCard from "@/components/ChangeLogCard";
 import ChangeLogDetail from "@/components/ChangeLogDetail";
+import { TypographyH3, TypographyP } from "@/components/Typography";
 import axios from "axios";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import { Oval } from "react-loader-spinner";
 
 export default function AllLogs() {
@@ -56,8 +57,8 @@ export default function AllLogs() {
               <Oval
                 height={50}
                 width={50}
-                color="black"
-                secondaryColor="white"
+                color="white"
+                secondaryColor="black"
               />
             </div>
           ) : (
