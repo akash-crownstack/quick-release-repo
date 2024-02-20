@@ -26,7 +26,7 @@ import { FormChangeLogPost, ReleaseTagsOption } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { useMutation } from "react-query";
 import Select from "react-select";
@@ -34,6 +34,8 @@ import * as z from "zod";
 
 const AddChangeLog = () => {
   const router = useRouter();
+  const [activeUser, setActiveUser] = useState<any>([]);
+
   const formSchema = z.object({
     title: z.string().min(1, { message: "Required" }).max(50, {
       message: "Fisrt Name can be maximum 50 characters",
@@ -73,6 +75,18 @@ const AddChangeLog = () => {
     },
   });
 
+  const getActiveUser = async () => {
+    try {
+      const res = await axios.get("/api/get-active-user");
+      setActiveUser(res.data.user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getActiveUser();
+  }, []);
   const handleCreatePost: SubmitHandler<FormChangeLogPost> = (data) => {
     createPost(data);
     console.log(data);
