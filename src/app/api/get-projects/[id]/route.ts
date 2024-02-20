@@ -10,6 +10,9 @@ export async function GET(
       where: {
         adminId: params?.id,
       },
+      orderBy: {
+        name: "asc",
+      },
     });
 
     return NextResponse.json(projects, { status: 200 });

@@ -35,18 +35,17 @@ export function Navbar() {
   const { data } = useSession();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   const params = useParams();
   const [projects, setProjects] = React.useState([]);
+  const [activeUser, setActiveUser] = React.useState<any>([]);
   const [activeProjectData, setActiveProjectData] = React.useState<
     Record<string, any>
   >({});
   const [loading, setLoading] = React.useState({
-    projectLoading: true,
+    projectLoading: false,
     activeProjectLoading: {} as ActiveProjectLoadingState,
     logout: false,
   });
-  const userId = (data?.user as { id: string })?.id;
 
   const setActiveProjectLoading = (projectId: string, isLoading: boolean) => {
     setLoading((prevLoading) => ({
@@ -55,19 +54,37 @@ export function Navbar() {
     }));
   };
 
+  const getActiveUser = async () => {
+    try {
+      const res = await axios.get("/api/get-active-user");
+      setActiveUser(res.data.user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (activeUser.id) {
+        await getProjects();
+      }
+    };
+
+    fetchData();
+  }, [pathname, activeUser.id]);
+
   const getActiveProject = async () => {
     try {
-      const res = await axios.get("/api/get-active-project");
+      const res = await axios.get(`/api/get-active-project/${activeUser.id}`);
       setActiveProjectData(res.data);
       return res.data;
     } catch (err) {
       console.log(err, "err");
     }
   };
-
   const getProjects = async () => {
     try {
-      const projects = await axios.get(`/api/get-projects/${userId}`);
+      const projects = await axios.get(`/api/get-projects/${activeUser?.id}`);
       setProjects(projects.data);
     } catch (err) {
       console.log(err, "error");
@@ -77,19 +94,12 @@ export function Navbar() {
       projectLoading: false,
     }));
   };
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (userId) {
-        await getProjects();
-      }
-    };
-
-    fetchData();
-  }, [pathname, userId]);
 
   React.useEffect(() => {
+    getActiveUser();
+    getProjects();
     getActiveProject();
-  }, []);
+  }, [pathname, activeUser.id]);
 
   const handleLogout = async () => {
     setLoading((prevLoading) => ({
@@ -117,9 +127,9 @@ export function Navbar() {
 
   const activeProject = async (projectId: string) => {
     try {
-      await axios.post(`/api/active-project/${projectId}/${userId}`);
-      const res = await getActiveProject();
+      await axios.post(`/api/active-project/${projectId}/${activeUser?.id}`);
       router.push("/changeLog/add");
+      getActiveProject();
     } catch (err) {
       console.log("error", err);
     }
@@ -128,11 +138,13 @@ export function Navbar() {
   const navigation = [
     { name: "Quick Release", href: "/allLogs", current: true },
     {
-      name: activeProjectData.name,
+      name: activeProjectData?.name,
       href: "/allLogs",
       current: true,
     },
   ];
+
+  console.log(activeProjectData, "activeProject");
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -261,7 +273,7 @@ export function Navbar() {
                                     {item.name}
                                   </div>
 
-                                  {item.id === activeProjectData.id ? (
+                                  {item.id === activeProjectData?.id ? (
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       viewBox="0 0 20 20"

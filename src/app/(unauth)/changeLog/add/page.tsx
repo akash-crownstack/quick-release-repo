@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import BaseTemplate from "@/templates/BaseTemplate";
 import { FormChangeLogPost, ReleaseTagsOption } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -33,17 +34,6 @@ import * as z from "zod";
 
 const AddChangeLog = () => {
   const router = useRouter();
-  let active = [];
-  if (typeof localStorage !== "undefined") {
-    const activeItem = localStorage.getItem("activeProject");
-    if (activeItem) {
-      active = JSON.parse(activeItem);
-    }
-  } else {
-    console.log("localStorage is not available in this environment.");
-  }
-  const activeProjectId = active?.map((item: any) => item.id);
-
   const formSchema = z.object({
     title: z.string().min(1, { message: "Required" }).max(50, {
       message: "Fisrt Name can be maximum 50 characters",
@@ -90,7 +80,7 @@ const AddChangeLog = () => {
 
   const { mutate: createPost, isLoading } = useMutation({
     mutationFn: (newPost: FormChangeLogPost) => {
-      return axios.post(`/api/create-changeLogs/${activeProjectId}`, newPost);
+      return axios.post(`/api/create-changeLogs/${""}`, newPost);
     },
     onError: (err) => {
       console.error(err);
@@ -107,7 +97,7 @@ const AddChangeLog = () => {
   ];
 
   return (
-    <>
+    <BaseTemplate>
       <MaxWidthWrapper>
         <div className="flex flex-col items-center justify-center">
           <Form {...form}>
@@ -224,7 +214,7 @@ const AddChangeLog = () => {
           </Form>
         </div>
       </MaxWidthWrapper>
-    </>
+    </BaseTemplate>
   );
 };
 

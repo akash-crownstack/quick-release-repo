@@ -3,29 +3,39 @@
 import ChangeLogCard from "@/components/ChangeLogCard";
 import ChangeLogDetail from "@/components/ChangeLogDetail";
 import { TypographyH3, TypographyP } from "@/components/Typography";
+import BaseTemplate from "@/templates/BaseTemplate";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Oval } from "react-loader-spinner";
 
 export default function AllLogs() {
   const [changeLogs, setChangeLogs] = useState([]);
+  const [activeProjectData, setActiveProjectData] = React.useState<
+    Record<string, any>
+  >({});
+  const { data } = useSession();
+
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  let active = [];
-  if (typeof localStorage !== "undefined") {
-    const activeItem = localStorage.getItem("activeProject");
-    if (activeItem) {
-      active = JSON.parse(activeItem);
+  const userId = (data?.user as { id: string })?.id;
+
+  const getActiveProject = async () => {
+    try {
+      const res = await axios.get("/api/get-active-project");
+      setActiveProjectData(res.data);
+      return res.data;
+    } catch (err) {
+      console.log(err, "err");
     }
-  } else {
-    console.log("localStorage is not available in this environment.");
-  }
-  const activeProjectId = active?.map((item: any) => item.id);
+  };
 
   const getChangeLogs = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`api/get-changelogs/${activeProjectId}`);
+      const res = await axios.get(`api/get-changelogs/${activeProjectData.id}`);
       setChangeLogs(res.data);
     } catch (err) {
       console.log(err, "err");
@@ -35,10 +45,11 @@ export default function AllLogs() {
 
   useEffect(() => {
     getChangeLogs();
+    getActiveProject();
   }, []);
 
   return (
-    <>
+    <BaseTemplate>
       <div className="md:flex md:items-center md:justify-between py-4 px-6">
         <TypographyH3 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
           Change Logs
@@ -69,6 +80,6 @@ export default function AllLogs() {
           <ChangeLogDetail />
         </div>
       </main>
-    </>
+    </BaseTemplate>
   );
 }
