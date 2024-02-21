@@ -89,7 +89,6 @@ const AddChangeLog = () => {
   }, []);
   const handleCreatePost: SubmitHandler<FormChangeLogPost> = (data) => {
     createPost(data);
-    console.log(data);
   };
 
   const { mutate: createPost, isLoading } = useMutation({

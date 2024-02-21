@@ -21,15 +21,7 @@ function classNames(...classes: any) {
 interface ActiveProjectLoadingState {
   [projectId: string]: boolean;
 }
-const setQueryParams = (
-  name: string,
-  value: any,
-  searchParams: ReadonlyURLSearchParams
-) => {
-  const params = new URLSearchParams(searchParams.toString());
-  params.set(name, value);
-  return params.toString();
-};
+
 export function Navbar() {
   const router = useRouter();
   const { data } = useSession();
@@ -43,16 +35,10 @@ export function Navbar() {
   >({});
   const [loading, setLoading] = React.useState({
     projectLoading: false,
-    activeProjectLoading: {} as ActiveProjectLoadingState,
+    activeProjectLoading: false as any,
     logout: false,
+    activeUserLoading: true,
   });
-
-  const setActiveProjectLoading = (projectId: string, isLoading: boolean) => {
-    setLoading((prevLoading) => ({
-      ...prevLoading,
-      [projectId]: isLoading,
-    }));
-  };
 
   const getActiveUser = async () => {
     try {
@@ -61,35 +47,37 @@ export function Navbar() {
     } catch (err) {
       console.log(err);
     }
+    setLoading((prevLoading) => ({
+      ...prevLoading,
+      activeUserLoading: false,
+    }));
   };
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (activeUser.id) {
-        await getProjects();
-      }
-    };
-
-    fetchData();
-  }, [pathname, activeUser.id]);
-
-  const getActiveProject = async () => {
+  const getActiveProject = async (userId: string) => {
     try {
-      const res = await axios.get(`/api/get-active-project/${activeUser.id}`);
-      setActiveProjectData(res.data);
-      return res.data;
+      if (userId) {
+        const res = await axios.get(`/api/get-active-project/${userId}`);
+        setActiveProjectData(res.data);
+      }
     } catch (err) {
       console.log(err, "err");
     }
+    setLoading((prevLoading) => ({
+      ...prevLoading,
+      activeProjectLoading: false,
+    }));
   };
-  const getProjects = async () => {
+
+  const getProjects = async (userId: string) => {
     try {
-      const projects = await axios.get(`/api/get-projects/${activeUser?.id}`);
-      setProjects(projects.data);
+      if (userId) {
+        const projects = await axios.get(`/api/get-projects/${userId}`);
+        setProjects(projects.data);
+      }
     } catch (err) {
       console.log(err, "error");
     }
-    setLoading((prevLoading: any) => ({
+    setLoading((prevLoading) => ({
       ...prevLoading,
       projectLoading: false,
     }));
@@ -97,9 +85,23 @@ export function Navbar() {
 
   React.useEffect(() => {
     getActiveUser();
-    getProjects();
-    getActiveProject();
+  }, []);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (activeUser.id) {
+        await getProjects(activeUser.id);
+      }
+    };
+
+    fetchData();
   }, [pathname, activeUser.id]);
+
+  React.useEffect(() => {
+    if (activeUser.id) {
+      getActiveProject(activeUser.id);
+    }
+  }, [activeUser.id]);
 
   const handleLogout = async () => {
     setLoading((prevLoading) => ({
@@ -125,11 +127,13 @@ export function Navbar() {
     }
   };
 
-  const activeProject = async (projectId: string) => {
+  const activeProject = async (projectId: string, userId: string) => {
     try {
-      await axios.post(`/api/active-project/${projectId}/${activeUser?.id}`);
-      router.push("/changeLog/add");
-      getActiveProject();
+      if (projectId && userId) {
+        await axios.post(`/api/active-project/${projectId}/${userId}`);
+        router.push("/changeLog/add");
+        getActiveProject(userId);
+      }
     } catch (err) {
       console.log("error", err);
     }
@@ -138,13 +142,11 @@ export function Navbar() {
   const navigation = [
     { name: "Quick Release", href: "/allLogs", current: true },
     {
-      name: activeProjectData?.name,
+      name: activeProjectData?.name ? activeProjectData?.name : null,
       href: "/allLogs",
       current: true,
     },
   ];
-
-  console.log(activeProjectData, "activeProject");
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -174,21 +176,32 @@ export function Navbar() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    {loading.activeProjectLoading ? (
+                      <Oval
+                        height={20}
+                        width={20}
+                        color="black"
+                        secondaryColor="white"
+                      />
+                    ) : (
+                      navigation.map((item) =>
+                        item.name ? (
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "rounded-md px-3 py-2 text-sm font-medium"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                          >
+                            {item.name}
+                          </a>
+                        ) : null
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -218,8 +231,19 @@ export function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                            <div className="font-medium truncate">
-                              {data?.user?.email}
+                            <div className="font-medium truncate flex justify-center items-center pl-1">
+                              {loading.activeUserLoading ? (
+                                <Oval
+                                  height={20}
+                                  width={20}
+                                  color="black"
+                                  secondaryColor="white"
+                                />
+                              ) : activeUser.email.length > 16 ? (
+                                activeUser.email.slice(0, 18) + "..."
+                              ) : (
+                                activeUser.email
+                              )}
                             </div>
                           </div>
                         )}
@@ -264,9 +288,9 @@ export function Navbar() {
                               <Menu.Item
                                 as="div"
                                 onClick={() => {
-                                  activeProject(item.id);
+                                  activeProject(item.id, activeUser.id);
                                 }}
-                                className="hover:bg-gray-100 hover:text-black cursor-pointer"
+                                className="hover:bg-gray-100 hover:text-black cursor-pointer border bottom-1"
                               >
                                 <div className="flex items-center">
                                   <div className="flex  pl-4 py-2 ">
@@ -305,6 +329,23 @@ export function Navbar() {
                         </>
                       )}
 
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            onClick={handleLogout}
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                            )}
+                          >
+                            <div className="flex  items-center">
+                              <Link href="settings/profile" className="text-l">
+                                Profile Settings
+                              </Link>
+                            </div>
+                          </a>
+                        )}
+                      </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
                           <a
